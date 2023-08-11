@@ -11,3 +11,34 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.maptooltip {
+  background-color: white;
+  color: black;
+  width: 200px;
+  height: 200px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+}
+
+.tooltipquestion {
+  position: 'absolute';
+  top: '30px';
+  right: '30px';
+  border: 'none';
+  background-color: 'transparent'
+}
+
+.mapboxgl-ctrl-group button.mapbox-gl-draw_ctrl-draw-btn {
+  background-size: 30px !important; /* Adjust the size accordingly */
+  width: 30px !important;
+  height: 30px !important;
+}
