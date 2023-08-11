@@ -6,17 +6,15 @@ module.exports = function override(config, env) {
     type: "javascript/auto"
   });
 
-  // 查找babel-loader规则，并将mapbox-gl从其exclude列表中移除
-  const babelLoaderFilter = (rule) =>
-    rule.loader && rule.loader.includes('babel') &&
-    rule.exclude && rule.exclude instanceof RegExp;
-  
-  let loaders = config.module.rules.find(rule => Array.isArray(rule.oneOf)).oneOf;
-  let babelLoader = loaders.find(babelLoaderFilter);
-  
-  if (babelLoader) {
-    babelLoader.exclude = [/[/\\\\]node_modules[/\\\\](?!mapbox-gl)[/\\\\]/];
-  }
+// 查找默认的babel-loader规则
+const babelLoaderRule = config.module.rules[1].oneOf.find(
+  rule => /babel-loader/.test(rule.loader)
+);
+
+// 确保mapbox-gl不被这个规则处理
+if (babelLoaderRule && babelLoaderRule.exclude) {
+  babelLoaderRule.exclude.push(/node_modules[/\\]mapbox-gl/);
+}
 
   return config;
 };

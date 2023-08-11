@@ -361,8 +361,9 @@ const MapLayer = () => {
       </Overlay>
       <div>
         <div style={{ position: 'absolute', top: '60px', right: '30px', border: 'none', backgroundColor: 'transparent' }}>
-        </div>
+      
         {showEditor ? <IconEditor close={hideIconEditor} /> : null}
+        </div>
         {showDrawEditor ? <DrawControl close={hideIconEditor}
           onDrawingChange={setIsDrawing}
           map={map} coordinates={coordinates} /> : null}
