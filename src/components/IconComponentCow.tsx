@@ -1,4 +1,4 @@
-import React, { Component, ReactNode, RefObject  } from 'react';
+import React, { Component, ReactNode, RefObject } from 'react';
 
 
 interface IconComponentCowProps {
@@ -66,14 +66,14 @@ class IconComponentCow extends Component<IconComponentCowProps> {
   }
 
   componentDidUpdate(prevProps: IconComponentCowProps) {
-    console.log("this.props.color",this.props.color)
+    console.log("this.props.color", this.props.color)
     if (prevProps.color !== this.props.color && this.svgRef.current) {
       const myString: string | undefined = this.props.color;
-      const validString = myString || ""; // 使用默认值
-      console.log("old",this.svgRef)
+      const validString = myString || "";
+      console.log("old", this.svgRef)
       this.svgRef.current.setAttribute("stroke", validString);
       this.svgRef.current.setAttribute("fill", validString);
-      console.log("new",this.svgRef)
+      console.log("new", this.svgRef)
 
     }
   }

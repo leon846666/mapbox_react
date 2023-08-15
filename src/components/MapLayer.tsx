@@ -1,12 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import mapboxgl, { Coordinate } from 'mapbox-gl';
+import mapboxgl from 'mapbox-gl';
 import { useNavigate } from 'react-router-dom';
 import { Button, Tooltip, Overlay } from 'react-bootstrap';
 import { FaRegQuestionCircle, } from 'react-icons/fa';
 import { FaDrawPolygon } from "react-icons/fa";
 import IconEditor from './iconEditor';
-import { features } from 'process';
 import DrawControl from './DrawEditor';
 import { Position } from '@turf/turf';
 
@@ -19,7 +18,6 @@ const MapLayer = () => {
   const [target, setTarget] = useState(null);
   var [showEditor, setShowEditor] = useState(false);
   var [showDrawEditor, setShowDrawEditor] = useState(false);
-  var [showChild, setShowChild] = useState(false);
   var [minZoomInit, setMinZoomInit] = useState(0);
   const [isDrawing, setIsDrawing] = React.useState(false);
   const [coordinates, setCoordinates] = useState<Position[][]>([]);
@@ -47,26 +45,6 @@ const MapLayer = () => {
     setShowDrawEditor(showDrawEditor);
   };
 
-  // Close the IconEditor
-  const hideDrawEditor = () => {
-    setShowDrawEditor(false);
-  };
-
-
-  useEffect(() => {
-    console.log("minZoomInit", minZoomInit); // 这会在 minZoomInit 更新后打印新值
-  }, [minZoomInit]);
-
-
-  useEffect(() => {
-    console.log("isDrawing", isDrawing); // 这会在 isDrawing 更新后打印新值
-    if (!isDrawing) {
-
-    }
-
-  }, [isDrawing]);
-
-
 
   useEffect(() => {
     // Navigate to new page when clickedPaddock changes
@@ -76,7 +54,7 @@ const MapLayer = () => {
   }, [clickedPaddock, navigate]);
 
   useEffect(() => {
-    mapboxgl.accessToken = 'pk.eyJ1IjoibGVvbjgyMCIsImEiOiJjbGtzeW10eHEwMDV3M2hvY3ZtaHN4Zm5iIn0.Z843hAkBHV0vf1nCyvsfJg';
+    mapboxgl.accessToken = process.env.REACT_APP_MAPBOX_ACCESS_TOKEN || ''; 
     const mapObject = new mapboxgl.Map({
       container: 'map',
       style: 'mapbox://styles/mapbox/streets-v11',
@@ -190,7 +168,6 @@ const MapLayer = () => {
                     if (drawEditorButton) {
                       drawEditorButton.addEventListener('click', function () {
                         console.log(paddName)
-                        // 更新图层样式使得除了activeId以外的所有polygon都显示为灰色
                         const currentFilter = map.getFilter('myDataLayer');
                         console.log("Current filter:", currentFilter);
                         map.setPaintProperty('myDataLayer', 'fill-color', [
@@ -272,7 +249,7 @@ const MapLayer = () => {
                   setClickedPaddock(paddock);
 
                 });
-                console.log(data)
+                // calculate the bounds from the GEOJSON data and return LngLatBounds object t move the camera to the center of the polygons
                 const bounds = data.features.reduce((bounds: any, feature: any) => {
                   if (feature.geometry.type === 'Polygon' || feature.geometry.type === 'MultiPolygon') {
                     feature.geometry.coordinates.forEach((ring: any) => {
@@ -292,6 +269,8 @@ const MapLayer = () => {
                 }, new mapboxgl.LngLatBounds());
 
                 map.fitBounds(bounds, { padding: 30, animate: false });
+
+
                 // get the init zoom
                 let mapInitZoom = map.getZoom();
                 map.on('zoom', () => {
@@ -340,11 +319,6 @@ const MapLayer = () => {
     setShowEditor(false);
   };
 
-
-
-  function handleGetDrawObject(draw: MapboxDraw): void {
-    console.log("draw =>", draw);
-  }
 
   return (
     <div style={{ position: 'relative', width: '100vw', height: '100vh', overflow: 'hidden' }}>

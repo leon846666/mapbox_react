@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from 'react';
-import MapboxDraw, { MapboxDrawControls } from '@mapbox/mapbox-gl-draw';
+import MapboxDraw from '@mapbox/mapbox-gl-draw';
 import '@mapbox/mapbox-gl-draw/dist/mapbox-gl-draw.css';
 import * as turf from '@turf/turf';
 import { Position } from '@turf/turf';
@@ -31,8 +31,6 @@ const DrawControl: React.FC<DrawControlProps> = ({ map, close, coordinates, onDr
 
     useEffect(() => {
         if (map) {
-
-
             drawRef.current = new MapboxDraw({
                 displayControlsDefault: false,
                 controls: {
@@ -40,10 +38,7 @@ const DrawControl: React.FC<DrawControlProps> = ({ map, close, coordinates, onDr
                     trash: true,
                 },
             });
-
             map.addControl(drawRef.current, 'top-left');
-
-
             const handleModeChange = function (event: any) {
                 if (onDrawingChange) {
                     onDrawingChange(event.mode === 'draw_polygon');
@@ -107,7 +102,7 @@ const DrawControl: React.FC<DrawControlProps> = ({ map, close, coordinates, onDr
 
                         }
 
-                        drawRef.current.changeMode('simple_select'); // 更改为选择模式
+                        drawRef.current.changeMode('simple_select'); // change 
                     }
                 }
 

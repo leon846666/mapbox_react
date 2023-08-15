@@ -3,7 +3,7 @@ import { SketchPicker, ColorResult } from 'react-color';
 import { Button } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import IconComponentCow from './IconComponentCow';
-import IconComponentSheep from './IconComponentSheep'; // 请同样修改这个组件以满足需求
+import IconComponentSheep from './IconComponentSheep'; 
 import { Canvg } from 'canvg';
 import axios from 'axios';
 
@@ -69,7 +69,7 @@ const IconEditor: React.FC<IconEditorProps> = ({ close }) => {
       const blob = new Blob([byteArray], { type: "image/png" })
 
       file.append('file', blob, fileName);
-
+      // need a back-end api to upload my icon.
       const response = await axios.post('https://localhost:7143/api/uploader/upload-icon/', file);
 
       if (response.status === 200) {
@@ -78,8 +78,8 @@ const IconEditor: React.FC<IconEditorProps> = ({ close }) => {
         console.error("Error uploading the image.");
       }
     } catch (error) {
-
       console.error("Error uploading the image:", error);
+
     }
   }
 
@@ -91,7 +91,7 @@ const IconEditor: React.FC<IconEditorProps> = ({ close }) => {
         <label htmlFor="iconPicker">Select an icon:</label>
         <div id="iconPicker">
           <IconComponentCow ref={cowIconComponentRef} onClick={() => setSelectedIconType("Cow")} size={52} style={{ color }} />
-          {/* <IconComponentSheep ref={sheepIconComponentRef} onClick={() => setSelectedIconType("Sheep")} size={52} style={{ color }} /> */}
+          <IconComponentSheep ref={sheepIconComponentRef} onClick={() => setSelectedIconType("Sheep")} size={52} style={{ color }} />
         </div>
       </div>
       <div>
@@ -107,6 +107,8 @@ const IconEditor: React.FC<IconEditorProps> = ({ close }) => {
 
         if (SelectedIconType === "Cow" && cowIconComponentRef.current) {
           svgData = cowIconComponentRef.current.getSVGData();
+        }else if (SelectedIconType === "Sheep" && sheepIconComponentRef.current) {
+          svgData = sheepIconComponentRef.current.getSVGData();
         }
         debugger
         if (svgData) {
@@ -123,8 +125,7 @@ const IconEditor: React.FC<IconEditorProps> = ({ close }) => {
           let fileName:string = SelectedIconType?.toLocaleLowerCase()!+"_"+color+".png";
 
           uploadImageToServer(fileName,pngDataUrl);
-          alert("icon is saved")
-
+        
 
         }
       }}>
